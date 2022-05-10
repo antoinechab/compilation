@@ -361,9 +361,15 @@ dfa = tree.toDfa()
 
 #Test
 message = 'baaab'
+message2 = 'baaabb'
+message3 = 'baaabbb'
 print('This is the regex : ' + regex)
 print('This is the alphabet : ' + ''.join(sorted(alphabet)))
 print('This is the automata : \n')
 dfa.write()
 print('\nTesting for : "'+message+'" : ')
 dfa.run(message)
+print('\nTesting for : "'+message2+'" : ')
+dfa.run(message2)
+print('\nTesting for : "'+message3+'" : ')
+dfa.run(message3)

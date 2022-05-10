@@ -13,13 +13,3 @@ if __name__ == '__main__':
     print('\n')
     print('Deterministic finite automaton:')
     print(automaton)
-
-
-#doc:
-'''
-https://pypi.org/project/automata-toolkit/
-
-https://www.geeksforgeeks.org/regular-expression-to-dfa/
-
-https://kandi.openweaver.com/python/mihai-craciun/regex-to-dfa#Summary
-'''
