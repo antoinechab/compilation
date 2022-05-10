@@ -1,22 +1,37 @@
+"""
+Find all nodes of the regex and create a list of them
+"""
 from copy import deepcopy
-from regex_check import *
+from regex_check import is_valid_regex
 import settings
 
 class RegexNode:
+    """
+    Find all nodes of the regex and create a list of them
+    """
 
     @staticmethod
     def trim_brackets(regex):
+        """
+        Retrun the original regex
+        """
         while regex[0] == '(' and regex[-1] == ')' and is_valid_regex(regex[1:-1]):
             regex = regex[1:-1]
         return regex
-    
+
     @staticmethod
-    def is_concat(c):
-        return c == '(' or RegexNode.is_letter(c)
-    
+    def is_concat(char):
+        """
+        Check if the char is a concatenation
+        """
+        return char == '(' or RegexNode.is_letter(char)
+
     @staticmethod
-    def is_letter(c):
-        return c in settings.myList['alphabet']
+    def is_letter(char):
+        """
+        Check if the char is a letter in the alphabet
+        """
+        return char in settings.myList['alphabet']
 
     def __init__(self, regex):
         self.nullable = None
@@ -41,7 +56,7 @@ class RegexNode:
             else:
                 self.nullable = False
             return
-        
+
         #It is an internal node
         #Finding the leftmost operators in all three
         kleene = -1
@@ -49,7 +64,7 @@ class RegexNode:
         concatenation = -1
         i = 0
 
-        #Getting the rest of terms    
+        #Getting the rest of terms
         while i < len(regex):
             if regex[i] == '(':
                 #Composed block
@@ -65,7 +80,7 @@ class RegexNode:
             else:
                 #Going to the next char
                 i+=1
-            
+
             #Found a concatenation in previous iteration
             #And also it was the last element check if breaking
             if i == len(regex):
@@ -85,7 +100,7 @@ class RegexNode:
             if regex[i] == '|':
                 if or_operator == -1:
                     or_operator = i
-        
+
         #Setting the current operation by priority
         if or_operator != -1:
             #Found an or operation
@@ -102,18 +117,21 @@ class RegexNode:
             self.item = '*'
             self.children.append(RegexNode(self.trim_brackets(regex[:kleene])))
 
-    def calc_functions(self, pos, followpos):
+    def calc_functions(self, pos, positions):
+        """
+        Calculate the firstpos, lastpos and nullable functions
+        """
         if self.is_letter(self.item):
             #Is a leaf
             self.firstpos = [pos]
             self.lastpos = [pos]
             self.position = pos
             #Add the position in the followpos list
-            followpos.append([self.item,[]])
+            positions.append([self.item,[]])
             return pos+1
         #Is an internal node
         for child in self.children:
-            pos = child.calc_functions(pos, followpos)
+            pos = child.calc_functions(pos, positions)
         #Calculate current functions
 
         if self.item == '.':
@@ -130,11 +148,11 @@ class RegexNode:
                 self.lastpos = deepcopy(self.children[1].lastpos)
             #Nullable
             self.nullable = self.children[0].nullable and self.children[1].nullable
-            #Followpos
+            #positions
             for i in self.children[0].lastpos:
                 for j in self.children[1].firstpos:
-                    if j not in followpos[i][1]:
-                        followpos[i][1] = sorted(followpos[i][1] + [j])
+                    if j not in positions[i][1]:
+                        positions[i][1] = sorted(positions[i][1] + [j])
 
         elif self.item == '|':
             #Is or operator
@@ -153,15 +171,25 @@ class RegexNode:
             self.lastpos = deepcopy(self.children[0].lastpos)
             #Nullable
             self.nullable = True
-            #Followpos
+            #positions
             for i in self.children[0].lastpos:
                 for j in self.children[0].firstpos:
-                    if j not in followpos[i][1]:
-                        followpos[i][1] = sorted(followpos[i][1] + [j])
+                    if j not in positions[i][1]:
+                        positions[i][1] = sorted(positions[i][1] + [j])
 
         return pos
 
     def write_level(self, level):
-        print(str(level) + ' ' + self.item, self.firstpos, self.lastpos, self.nullable, '' if self.position == None else self.position)
+        """
+        Display the tree level by level
+        """
+        print(
+            str(level) + ' ' +
+            self.item,
+            self.firstpos,
+            self.lastpos,
+            self.nullable,
+            '' if self.position is None else self.position
+        )
         for child in self.children:
             child.write_level(level+1)
