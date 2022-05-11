@@ -9,7 +9,6 @@ int op=0,num=0,bra=0;
     exit(1);
 }
 [0-9]+ {
-    //if op equal 0 then print error
     if(op==0)
     {
         printf("\n il manque l'opérateur \n");
@@ -30,13 +29,13 @@ int op=0,num=0,bra=0;
     bra--;
     printf("%s",yytext);
 }
-.|\n {exit(1);}
+\n {op=0;num=0;bra=0;}
+. {printf("\n correct");exit(1);}
 %%
 
 int main()
 {
     printf("expression:");
     yylex();
-    printf("\n correct");
     return 0;
 }
