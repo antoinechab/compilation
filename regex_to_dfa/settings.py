@@ -1,11 +1,12 @@
 """
 Init all settings use in the application
 """
+# pylint: disable=global-at-module-level
 
-global myList
-myList = {}
-myList['DEBUG'] = False
-myList['use_lambda'] = False
-myList['lambda_symbol'] = '_'
-myList['extra'] = ''
-myList['alphabet'] = None
+global SESSION
+SESSION = {}
+SESSION['DEBUG'] = False
+SESSION['use_lambda'] = False
+SESSION['lambda_symbol'] = '_'
+SESSION['extra'] = ''
+SESSION['alphabet'] = None

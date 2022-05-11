@@ -6,7 +6,7 @@ Init variables and run programme
 import sys
 from regex_check import is_valid_regex
 from regex_tree import RegexTree
-import settings
+from settings import SESSION
 
 #Preprocessing
 def preprocess(regex):
@@ -49,13 +49,13 @@ if __name__ == '__main__':
 
     #Preprocess regex and generate the alphabet
     p_regex = preprocess(REGEX_VALID)
-    settings.myList['alphabet'] = gen_alphabet(p_regex)
+    SESSION['alphabet'] = gen_alphabet(p_regex)
     #add optional letters that don't appear in the expression
-    settings.myList['alphabet'] = settings.myList['alphabet'].union(set(settings.myList['extra']))
+    SESSION['alphabet'] = SESSION['alphabet'].union(set(SESSION['extra']))
 
     #Construct
     tree = RegexTree(p_regex)
-    if settings.myList['DEBUG']:
+    if SESSION['DEBUG']:
         tree.write()
     dfa = tree.to_dfa()
 
@@ -64,7 +64,7 @@ if __name__ == '__main__':
     MESSAGE2 = 'baaabb'
     MESSAGE3 = 'baaabbbc'
     print('Valid regex : ' + REGEX_VALID)
-    print('alphabet : '+ ''.join(sorted(settings.myList['alphabet'])).replace('#',''))
+    print('alphabet : '+ ''.join(sorted(SESSION['alphabet'])).replace('#',''))
     print('automata : \n')
     # print the automata in the console (with states they transitions and final states (F))
     dfa.write()

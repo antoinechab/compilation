@@ -4,7 +4,7 @@ Make the deterministe automata from regex
 
 from regex_node import RegexNode
 from dfa import Dfa
-import settings
+from settings import SESSION
 
 class RegexTree:
     """
@@ -27,7 +27,7 @@ class RegexTree:
         Parse positions and build the tree
         """
         self.root.calc_functions(0, self.positions)
-        if settings.myList['DEBUG'] is True:
+        if SESSION['DEBUG'] is True:
             print(self.positions)
 
     def to_dfa(self):
@@ -42,8 +42,8 @@ class RegexTree:
 
         marked_states = []
         state_list = []
-        alphabet = settings.myList['alphabet'] - {
-            '#', settings.myList['lambda_symbol'] if settings.myList['use_lambda'] else ''
+        alphabet = SESSION['alphabet'] - {
+            '#', SESSION['lambda_symbol'] if SESSION['use_lambda'] else ''
         }
         delta = []
         finale_states = []
