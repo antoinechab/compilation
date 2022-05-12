@@ -18,7 +18,10 @@ chmod +x index.py
 ```bash
 cd lex
 chmod +x compil.sh
+./compil.sh
 <lexFileNumber>
 
-./lex<lexFileNumber> < text.txt
+./lex<lexFileNumber>
+<expression>
 ```
+![dataset-expression](https://user-images.githubusercontent.com/50440323/167969249-544657d7-d46c-426e-974d-534b62f963ce.png)
